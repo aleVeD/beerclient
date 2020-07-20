@@ -6,6 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -28,7 +30,7 @@ public class BreweryClient {
     return restTemplate.getForObject(apihost + BEER_PATH_V1 + uuid.toString(), BeerDto.class);
   }
 
-  public void updateBeer(BeerDto beerDto, UUID uuid){
+  public void updateBeer(@Validated @RequestBody BeerDto beerDto, UUID uuid){
     restTemplate.put(apihost+BEER_PATH_V1+"/"+uuid.toString(), beerDto);
   }
 
@@ -36,7 +38,7 @@ public class BreweryClient {
     restTemplate.delete(apihost+BEER_PATH_V1+"/"+ uuid);
   }
 
-  public URI saveNewBeer(BeerDto beerDto){
+  public URI saveNewBeer(@Validated @RequestBody BeerDto beerDto){
     return restTemplate.postForLocation(apihost + BEER_PATH_V1, beerDto);
   }
 

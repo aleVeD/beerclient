@@ -1,0 +1,23 @@
+package guru.springframework.beerclientdemo.web.client;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import javax.validation.ConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
+
+@ControllerAdvice
+public class MVCExceptionHandler {
+
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ResponseEntity<List> validationErrorHandler(ConstraintViolationException ex){
+    List<String> listErrors = new ArrayList<>(ex.getConstraintViolations().size());
+    ex.getConstraintViolations().forEach(constraintViolation -> {
+      listErrors.add(ex.toString());
+    });
+    return new ResponseEntity<>(listErrors, HttpStatus.BAD_REQUEST);
+  }
+}
